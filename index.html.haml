@@ -1,0 +1,16 @@
+!!!
+%html
+  %head
+    %link{:href => 'assets/application.css', :rel => 'stylesheet', :type => 'text/css'}
+    %script{:src => 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'}
+    %script{:src => 'assets/application.js'}
+    %script{:src => 'assets/jquery-ui-1.8.16.custom.min.js'}
+  %body
+    %div.container
+      %div.calendar-container
+        %div.calendar.pull-left
+        %div.scroll.pull-right
+          #month.scroll-bar
+            %div.handle#draggable-month
+          #year.scroll-bar
+            %div.handle#draggable-year

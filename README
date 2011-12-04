@@ -1,0 +1,3 @@
+coffee -o assets/ -cw lib/javascripts/
+haml index.html.haml index.html
+sass --watch lib/stylesheets/application.sass:assets/application.css
