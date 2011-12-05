@@ -1,13 +1,20 @@
 class Calendar
 	@monthOffsets
 	@yearOffsets
-	
+	@currentDate
+	@month
+	@year
+	@firstDay
 	constructor:(month, year)->
+		@currentDate = new Date()
+		@month = month ? @currentDate.getMonth()
+		@year = year ? @currentDate.getFullYear()
 		@dayLabels = ['Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat', 'Sun']
 		@monthLabels = ['January', 'February', 'March', 'April',
 												 'May', 'June', 'July', 'August', 'September',
 												 'October', 'November', 'December']
 		@daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+		@firstDay = new Date(@year, @month, 1).getDay();
 
 	setupScrollBars:->
 		$( "#draggable-month" ).draggable 
@@ -67,8 +74,41 @@ class Calendar
 		if @month == 1
 			if ((@year % 4 == 0 && @year % 100 != 0) || @year % 400 == 0)
 				return true
-
-
+	
+	#fixme: just clone dom and update
+	buildCalendar:->
+		html = ''
+		html += """
+		<table class="zebra-striped">
+			<caption> #{@monthLabels[@month]} #{@year} </caption>
+			<thead>
+			<tr>
+		"""
+		for day in @dayLabels 
+			html += "<th>#{day}</th>"
+		html += '''
+			</tr>
+		</thead>
+		<tbody>
+			<tr>
+		'''
+		buildWeek = true
+		day = 1
+		while day < @daysInMonth[@month]
+			for num in [0..6]
+				html += "<td>"
+				if (day <= @daysInMonth[@month]) and ((day > 1) or (num >= @firstDay))
+					html += day
+					day++
+				html += "</td>"
+			html += "</tr>"
+		html += '''
+		</tbody>
+		</table>
+		'''	
+		$('.calendar').html html
+		console.log html
 $ ->
 	calendar = new Calendar()
 	calendar.setupScrollBars()
+	calendar.buildCalendar()

@@ -8,6 +8,14 @@
 
     Calendar.yearOffsets;
 
+    Calendar.currentDate;
+
+    Calendar.month;
+
+    Calendar.year;
+
+    Calendar.firstDay;
+
     function Calendar(month, year) {
       this.monthScrollDidStart = __bind(this.monthScrollDidStart, this);
       this.monthScrollDidDrag = __bind(this.monthScrollDidDrag, this);
@@ -15,9 +23,13 @@
       this.yearScrollDidStart = __bind(this.yearScrollDidStart, this);
       this.yearScrollDidDrag = __bind(this.yearScrollDidDrag, this);
       this.yearScrollDidStop = __bind(this.yearScrollDidStop, this);
-      this.scrollTo = __bind(this.scrollTo, this);      this.dayLabels = ['Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat', 'Sun'];
+      this.scrollTo = __bind(this.scrollTo, this);      this.currentDate = new Date();
+      this.month = month != null ? month : this.currentDate.getMonth();
+      this.year = year != null ? year : this.currentDate.getFullYear();
+      this.dayLabels = ['Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat', 'Sun'];
       this.monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+      this.firstDay = new Date(this.year, this.month, 1).getDay();
     }
 
     Calendar.prototype.setupScrollBars = function() {
@@ -98,6 +110,34 @@
       }
     };
 
+    Calendar.prototype.buildCalendar = function() {
+      var buildWeek, day, html, num, _i, _len, _ref;
+      html = '';
+      html += "<table class=\"zebra-striped\">\n	<caption> " + this.monthLabels[this.month] + " " + this.year + " </caption>\n	<thead>\n	<tr>";
+      _ref = this.dayLabels;
+      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
+        day = _ref[_i];
+        html += "<th>" + day + "</th>";
+      }
+      html += '	</tr>\n</thead>\n<tbody>\n	<tr>';
+      buildWeek = true;
+      day = 1;
+      while (day < this.daysInMonth[this.month]) {
+        for (num = 0; num <= 6; num++) {
+          html += "<td>";
+          if ((day <= this.daysInMonth[this.month]) && ((day > 1) || (num >= this.firstDay))) {
+            html += day;
+            day++;
+          }
+          html += "</td>";
+        }
+        html += "</tr>";
+      }
+      html += '</tbody>\n</table>';
+      $('.calendar').html(html);
+      return console.log(html);
+    };
+
     return Calendar;
 
   })();
@@ -105,7 +145,8 @@
   $(function() {
     var calendar;
     calendar = new Calendar();
-    return calendar.setupScrollBars();
+    calendar.setupScrollBars();
+    return calendar.buildCalendar();
   });
 
 }).call(this);

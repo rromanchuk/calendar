@@ -2,26 +2,33 @@
 @import variables
 @import mixins
 @import scaffolding
+@import tables
 
 .calendar-container
-  width: 500px
-  height: 500px
-  background-color: gray
-  .calendar
-    width: 300px
-    height: 300px
-    background-color: $grayLight
-    overflow: visible
-  .scroll
-    height: 100%
-    width: 200px
-    .scroll-bar
-      width: 80px
-      height: 100%
-      background-color: red
-      float: right
-      border: solid 1px black
-      .handle
-        background-color: blue
-        width: 100%
-        height: 30px
+	width: 500px
+	height: 500px
+	background-color: gray
+	.calendar
+		width: 300px
+		height: 300px
+		background-color: $grayLight
+		overflow: visible
+	.scroll
+		height: 100%
+		width: 200px
+		.scroll-bar
+			width: 80px
+			height: 100%
+			background-color: red
+			float: right
+			border: solid 1px black
+			ul
+				text-align: center
+				margin-top: -20px
+				li
+					padding: 10px
+					height: 20px
+			.handle
+				background-color: blue
+				width: 100%
+				height: 30px
