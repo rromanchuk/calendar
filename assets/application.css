@@ -488,9 +488,9 @@ table .headerSortDown.purple {
   background-color: gray; }
   .calendar-container .calendar {
     width: 300px;
-    height: 300px;
+    height: 100%;
     background-color: #bfbfbf;
-    overflow: visible; }
+    overflow: hidden; }
   .calendar-container .scroll {
     height: 100%;
     width: 200px; }
@@ -501,12 +501,25 @@ table .headerSortDown.purple {
       float: right;
       border: solid 1px black; }
       .calendar-container .scroll .scroll-bar ul {
-        text-align: center;
-        margin-top: -20px; }
+        text-align: center; }
         .calendar-container .scroll .scroll-bar ul li {
-          padding: 10px;
+          padding: 5px;
           height: 20px; }
       .calendar-container .scroll .scroll-bar .handle {
         background-color: blue;
         width: 100%;
-        height: 30px; }
+        alpha: 0.7; }
+      .calendar-container .scroll .scroll-bar #draggable-month.handle {
+        height: 50px; }
+      .calendar-container .scroll .scroll-bar #draggable-year.handle {
+        height: 25px; }
+
+#year ul {
+  margin-top: -25px; }
+
+#month ul {
+  margin-top: -50px; }
+
+table {
+  height: 200px;
+  width: 300px; }

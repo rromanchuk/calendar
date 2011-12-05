@@ -22,8 +22,7 @@
       this.monthScrollDidStop = __bind(this.monthScrollDidStop, this);
       this.yearScrollDidStart = __bind(this.yearScrollDidStart, this);
       this.yearScrollDidDrag = __bind(this.yearScrollDidDrag, this);
-      this.yearScrollDidStop = __bind(this.yearScrollDidStop, this);
-      this.scrollTo = __bind(this.scrollTo, this);      this.currentDate = new Date();
+      this.yearScrollDidStop = __bind(this.yearScrollDidStop, this);      this.currentDate = new Date();
       this.month = month != null ? month : this.currentDate.getMonth();
       this.year = year != null ? year : this.currentDate.getFullYear();
       this.dayLabels = ['Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat', 'Sun'];
@@ -63,7 +62,9 @@
     };
 
     Calendar.prototype.scrollTo = function(date) {
-      return console.log('scroll to' + date);
+      var offset;
+      offset = $("table[month='" + date.month + "'][year='" + date.year + "']").offset();
+      return $('.calendar').scrollTop(offset.top - 200);
     };
 
     Calendar.prototype.yearScrollDidStop = function(event, ui) {
@@ -110,32 +111,48 @@
       }
     };
 
+    Calendar.prototype.scrollToCurrent = function() {
+      var offset;
+      offset = $("table[month='" + this.month + "'][year='" + this.year + "']").offset();
+      return $('.calendar').scrollTop(offset.top - 200);
+    };
+
     Calendar.prototype.buildCalendar = function() {
-      var buildWeek, day, html, num, _i, _len, _ref;
-      html = '';
-      html += "<table class=\"zebra-striped\">\n	<caption> " + this.monthLabels[this.month] + " " + this.year + " </caption>\n	<thead>\n	<tr>";
-      _ref = this.dayLabels;
-      for (_i = 0, _len = _ref.length; _i < _len; _i++) {
-        day = _ref[_i];
-        html += "<th>" + day + "</th>";
-      }
-      html += '	</tr>\n</thead>\n<tbody>\n	<tr>';
-      buildWeek = true;
-      day = 1;
-      while (day < this.daysInMonth[this.month]) {
-        for (num = 0; num <= 6; num++) {
-          html += "<td>";
-          if ((day <= this.daysInMonth[this.month]) && ((day > 1) || (num >= this.firstDay))) {
-            html += day;
-            day++;
+      var buildWeek, day, html, month, num, year, _ref, _ref2, _results;
+      _results = [];
+      for (year = _ref = this.year - 5, _ref2 = this.year + 5; _ref <= _ref2 ? year <= _ref2 : year >= _ref2; _ref <= _ref2 ? year++ : year--) {
+        _results.push((function() {
+          var _i, _len, _ref3, _results2;
+          _results2 = [];
+          for (month = 0; month <= 11; month++) {
+            html = '';
+            html += "<table month=\"" + month + "\" year=\"" + year + "\" class=\"zebra-striped\">\n	<caption> " + this.monthLabels[month] + " " + year + " </caption>\n	<thead>\n	<tr>";
+            _ref3 = this.dayLabels;
+            for (_i = 0, _len = _ref3.length; _i < _len; _i++) {
+              day = _ref3[_i];
+              html += "<th>" + day + "</th>";
+            }
+            html += '	</tr>\n</thead>\n<tbody>\n	<tr>';
+            buildWeek = true;
+            day = 1;
+            while (day < this.daysInMonth[month]) {
+              for (num = 0; num <= 6; num++) {
+                html += "<td>";
+                if ((day <= this.daysInMonth[month]) && ((day > 1) || (num >= this.firstDay))) {
+                  html += day;
+                  day++;
+                }
+                html += "</td>";
+              }
+              html += "</tr>";
+            }
+            html += '</tbody>\n</table>';
+            _results2.push($('.calendar').append(html));
           }
-          html += "</td>";
-        }
-        html += "</tr>";
+          return _results2;
+        }).call(this));
       }
-      html += '</tbody>\n</table>';
-      $('.calendar').html(html);
-      return console.log(html);
+      return _results;
     };
 
     return Calendar;
@@ -146,7 +163,8 @@
     var calendar;
     calendar = new Calendar();
     calendar.setupScrollBars();
-    return calendar.buildCalendar();
+    calendar.buildCalendar();
+    return calendar.scrollToCurrent();
   });
 
 }).call(this);

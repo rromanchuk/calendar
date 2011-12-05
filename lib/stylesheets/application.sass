@@ -4,15 +4,20 @@
 @import scaffolding
 @import tables
 
+$year-handle: 25px
+$month-handle: 50px
+$calendarHeight: 200px
+$calendarWidth: 300px
+
 .calendar-container
 	width: 500px
 	height: 500px
 	background-color: gray
 	.calendar
 		width: 300px
-		height: 300px
+		height: 100%
 		background-color: $grayLight
-		overflow: visible
+		overflow: hidden
 	.scroll
 		height: 100%
 		width: 200px
@@ -24,11 +29,23 @@
 			border: solid 1px black
 			ul
 				text-align: center
-				margin-top: -20px
 				li
-					padding: 10px
+					padding: 5px
 					height: 20px
 			.handle
 				background-color: blue
 				width: 100%
-				height: 30px
+				alpha: 0.7
+			#draggable-month.handle
+				height: $month-handle
+			#draggable-year.handle
+				height: $year-handle
+				
+#year ul
+	margin-top: -$year-handle
+#month ul
+	margin-top: -$month-handle
+	
+table
+	height: $calendarHeight
+	width: $calendarWidth

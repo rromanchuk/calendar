@@ -38,8 +38,9 @@ class Calendar
 		for month in @monthLabels
 			@monthOffsets.push $("[month=#{month}]").offset()
 			
-	scrollTo:(date)=>
-		console.log 'scroll to' + date
+	scrollTo:(date)->
+		offset = $("table[month='#{date.month}'][year='#{date.year}']").offset()
+		$('.calendar').scrollTop(offset.top - 200)
 	
 	yearScrollDidStop:(event, ui)=>
 		console.log 'yearScrollDidStop'
@@ -75,40 +76,46 @@ class Calendar
 			if ((@year % 4 == 0 && @year % 100 != 0) || @year % 400 == 0)
 				return true
 	
+	scrollToCurrent:->
+		offset = $("table[month='#{@month}'][year='#{@year}']").offset()
+		$('.calendar').scrollTop(offset.top - 200)
+	
 	#fixme: just clone dom and update
 	buildCalendar:->
-		html = ''
-		html += """
-		<table class="zebra-striped">
-			<caption> #{@monthLabels[@month]} #{@year} </caption>
-			<thead>
-			<tr>
-		"""
-		for day in @dayLabels 
-			html += "<th>#{day}</th>"
-		html += '''
-			</tr>
-		</thead>
-		<tbody>
-			<tr>
-		'''
-		buildWeek = true
-		day = 1
-		while day < @daysInMonth[@month]
-			for num in [0..6]
-				html += "<td>"
-				if (day <= @daysInMonth[@month]) and ((day > 1) or (num >= @firstDay))
-					html += day
-					day++
-				html += "</td>"
-			html += "</tr>"
-		html += '''
-		</tbody>
-		</table>
-		'''	
-		$('.calendar').html html
-		console.log html
+		for year in [@year-5..@year+5]
+			for month in [0..11]
+				html = ''
+				html += """
+				<table month="#{month}" year="#{year}" class="zebra-striped">
+					<caption> #{@monthLabels[month]} #{year} </caption>
+					<thead>
+					<tr>
+				"""
+				for day in @dayLabels 
+					html += "<th>#{day}</th>"
+				html += '''
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+				'''
+				buildWeek = true
+				day = 1
+				while day < @daysInMonth[month]
+					for num in [0..6]
+						html += "<td>"
+						if (day <= @daysInMonth[month]) and ((day > 1) or (num >= @firstDay))
+							html += day
+							day++
+						html += "</td>"
+					html += "</tr>"
+				html += '''
+				</tbody>
+				</table>
+				'''	
+				$('.calendar').append html
 $ ->
 	calendar = new Calendar()
 	calendar.setupScrollBars()
 	calendar.buildCalendar()
+	calendar.scrollToCurrent()
