@@ -9,8 +9,36 @@
     %div.container
       %div.calendar-container
         %div.calendar.pull-left
+          %table
+            %thead
+            %tbody
         %div.scroll.pull-right
           #month.scroll-bar
             %div.handle#draggable-month
+            %ul
+              %li{:month => 'jan'} Jan
+              %li{:month => 'feb'} Feb
+              %li{:month => 'mar'} Mar
+              %li{:month => 'apr'} Apr
+              %li{:month => 'may'} May
+              %li{:month => 'jun'} Jun
+              %li{:month => 'jul'} Jul
+              %li{:month => 'aug'} Aug
+              %li{:month => 'sep'} Sep
+              %li{:month => 'oct'} Oct
+              %li{:month => 'nov'} Nov
+              %li{:month => 'dec'} Dec
           #year.scroll-bar
             %div.handle#draggable-year
+            %ul
+              %li 1999
+              %li 1999
+              %li 1999
+              %li 1999
+              %li 1999
+              %li 1999
+              %li 1999
+              %li 1999
+              %li 1999
+              %li 1999
+              %li 1999
