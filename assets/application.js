@@ -110,8 +110,7 @@
 
     Calendar.prototype.scrollMonthToDate = function(date) {
       var top;
-      top = (date.getDOY() - (this.monthSelectorHeight * 0.5)) + 50;
-      console.lot("top is " + top + " and days are " + (date.getDOY()));
+      top = date.getDOY();
       return $('#draggable-month').animate({
         top: top
       }, 'slow');
@@ -147,13 +146,9 @@
     Calendar.prototype.monthScrollDidStop = function(event, ui) {
       var date, day, top;
       top = ui.offset.top - 50;
-      console.log("top is:" + top);
-      console.log("center is: " + ((this.monthSelectorHeight * 0.5) + top));
       day = (this.monthSelectorHeight * 0.5) + top;
-      console.log("scrolled to year " + this.year + " and day " + day);
       date = new Date(this.year, 0, day);
-      this.scrollToDate(date);
-      return console.log(date);
+      return this.scrollToDate(date);
     };
 
     Calendar.prototype.monthScrollDidDrag = function(event, ui) {};

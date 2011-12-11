@@ -81,8 +81,7 @@ class Calendar
 		@day = day
 	
 	scrollMonthToDate: (date)->
-		top = (date.getDOY() - (@monthSelectorHeight * 0.5)) + 50
-		console.lot "top is #{top} and days are #{date.getDOY()}"
+		top = date.getDOY()
 		$('#draggable-month').animate
 			top: top
 			, 'slow'
@@ -110,13 +109,9 @@ class Calendar
 	
 	monthScrollDidStop:(event, ui)=>
 		top = ui.offset.top - 50
-		console.log "top is:" + top
-		console.log "center is: " + ((@monthSelectorHeight * 0.5) + top)
 		day = ((@monthSelectorHeight * 0.5) + top)
-		console.log "scrolled to year #{@year} and day #{day}"
 		date = new Date(@year, 0, day)
 		@scrollToDate date
-		console.log date
 	
 	monthScrollDidDrag:(event, ui)=>
 		# top = ui.offset.top
