@@ -6,25 +6,29 @@
 
 $year-handle: 25px
 $month-handle: 50px
-$calendarHeight: 200px
-$calendarWidth: 300px
+$calendarHeight: 300px
+$calendarWidth: 250px
 
 .calendar-container
-	width: 500px
-	height: 500px
+	width: 400px
+	height: 400px
+	margin-top: 20px
 	background-color: gray
+	@include box-shadow
 	.calendar
-		width: 300px
+		width: $calendarWidth
 		height: 100%
 		background-color: $grayLight
 		overflow: hidden
 	.scroll
 		height: 100%
-		width: 200px
+		#month.scroll-bar
+			width: 85px
+		#year.scroll-bar
+			width: 60px
 		.scroll-bar
-			width: 80px
 			height: 100%
-			background-color: red
+			@include vertical-three-colors-gradient($grayLight, $white, 50%, $grayLight)
 			float: right
 			border: solid 1px black
 			ul
@@ -33,19 +37,20 @@ $calendarWidth: 300px
 					padding: 5px
 					height: 20px
 			.handle
-				background-color: blue
+				@include vertical-gradient($white, $black)
 				width: 100%
-				alpha: 0.7
+				opacity: 0.7
+				@include border-radius
 			#draggable-month.handle
 				height: $month-handle
 			#draggable-year.handle
 				height: $year-handle
 				
 #year ul
-	margin-top: -$year-handle
+	margin-top: -30px
 #month ul
-	margin-top: -$month-handle
+	margin-top: -30px
 	
 table
-	height: $calendarHeight
-	width: $calendarWidth
+	th, td
+		padding: 5px 5px 9px

@@ -127,7 +127,7 @@ body {
   background-color: white;
   margin: 0;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: normal;
   line-height: 18px;
   color: #404040; }
@@ -316,7 +316,7 @@ table {
   width: 100%;
   margin-bottom: 18px;
   padding: 0;
-  font-size: 13px;
+  font-size: 12px;
   border-collapse: collapse; }
   table th,
   table td {
@@ -483,21 +483,35 @@ table .headerSortDown.purple {
   background-color: #e2d5f0; }
 
 .calendar-container {
-  width: 500px;
-  height: 500px;
-  background-color: gray; }
+  width: 400px;
+  height: 400px;
+  margin-top: 20px;
+  background-color: gray;
+  -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25); }
   .calendar-container .calendar {
-    width: 300px;
+    width: 250px;
     height: 100%;
     background-color: #bfbfbf;
     overflow: hidden; }
   .calendar-container .scroll {
-    height: 100%;
-    width: 200px; }
+    height: 100%; }
+    .calendar-container .scroll #month.scroll-bar {
+      width: 85px; }
+    .calendar-container .scroll #year.scroll-bar {
+      width: 60px; }
     .calendar-container .scroll .scroll-bar {
-      width: 80px;
       height: 100%;
-      background-color: red;
+      background-color: #bfbfbf;
+      background-repeat: no-repeat;
+      background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#bfbfbf), color-stop(50%, white), to(#bfbfbf));
+      background-image: -webkit-linear-gradient(#bfbfbf, white 50%, #bfbfbf);
+      background-image: -moz-linear-gradient(#bfbfbf, white 50%, #bfbfbf);
+      background-image: -ms-linear-gradient(#bfbfbf, white 50%, #bfbfbf);
+      background-image: -o-linear-gradient(#bfbfbf, white 50%, #bfbfbf);
+      background-image: linear-gradient(#bfbfbf, white 50%, #bfbfbf);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#bfbfbf', endColorstr='#bfbfbf', GradientType=0);
       float: right;
       border: solid 1px black; }
       .calendar-container .scroll .scroll-bar ul {
@@ -506,20 +520,31 @@ table .headerSortDown.purple {
           padding: 5px;
           height: 20px; }
       .calendar-container .scroll .scroll-bar .handle {
-        background-color: blue;
+        background-color: black;
+        background-repeat: repeat-x;
+        background-image: -khtml-gradient(linear, left top, left bottom, from(white), to(black));
+        background-image: -moz-linear-gradient(top, white, black);
+        background-image: -ms-linear-gradient(top, white, black);
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, white), color-stop(100%, black));
+        background-image: -webkit-linear-gradient(top, white, black);
+        background-image: -o-linear-gradient(top, white, black);
+        background-image: linear-gradient(top, white, black);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='white', endColorstr='black', GradientType=0);
         width: 100%;
-        alpha: 0.7; }
+        opacity: 0.7;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px; }
       .calendar-container .scroll .scroll-bar #draggable-month.handle {
         height: 50px; }
       .calendar-container .scroll .scroll-bar #draggable-year.handle {
         height: 25px; }
 
 #year ul {
-  margin-top: -25px; }
+  margin-top: -30px; }
 
 #month ul {
-  margin-top: -50px; }
+  margin-top: -30px; }
 
-table {
-  height: 200px;
-  width: 300px; }
+table th, table td {
+  padding: 5px 5px 9px; }

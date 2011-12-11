@@ -2,11 +2,13 @@
 %html
 	%head
 		%link{:href => 'assets/application.css', :rel => 'stylesheet', :type => 'text/css'}
-		%script{:src => 'http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'}
+		%script{:src => 'http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'}
 		%script{:src => 'assets/application.js'}
 		%script{:src => 'assets/jquery-ui-1.8.16.custom.min.js'}
 	%body
 		%div.container
+			%div.date-selector
+				%span.date
 			%div.calendar-container
 				%div.calendar.pull-left
 					%table{:style => "display: none"}
@@ -25,30 +27,6 @@
 					#year.scroll-bar
 						%div.handle#draggable-year
 						%ul
-							%li{:year => 1999} 1999
-							%li{:year => 1999} 1999
-							%li{:year => 1999} 1999
-							%li{:year => 1999} 1999
-							%li{:year => 1999} 1999
-							%li{:year => 1999} 1999
-							%li{:year => 1999} 1999
-							%li{:year => 1999} 1999
-							%li{:year => 1999} 1999
-							%li{:year => 1999} 1999
-							%li{:year => 1999} 1999
 					#month.scroll-bar
 						%div.handle#draggable-month
 						%ul
-							%li{:month => 'jan'} Jan
-							%li{:month => 'feb'} Feb
-							%li{:month => 'mar'} Mar
-							%li{:month => 'apr'} Apr
-							%li{:month => 'may'} May
-							%li{:month => 'jun'} Jun
-							%li{:month => 'jul'} Jul
-							%li{:month => 'aug'} Aug
-							%li{:month => 'sep'} Sep
-							%li{:month => 'oct'} Oct
-							%li{:month => 'nov'} Nov
-							%li{:month => 'dec'} Dec
-					

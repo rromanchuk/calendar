@@ -2,12 +2,15 @@
 <html>
   <head>
     <link href='assets/application.css' rel='stylesheet' type='text/css' />
-    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'></script>
+    <script src='http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js'></script>
     <script src='assets/application.js'></script>
     <script src='assets/jquery-ui-1.8.16.custom.min.js'></script>
   </head>
   <body>
     <div class='container'>
+      <div class='date-selector'>
+        <span class='date'></span>
+      </div>
       <div class='calendar-container'>
         <div class='calendar pull-left'>
           <table style='display: none'>
@@ -29,36 +32,11 @@
         <div class='scroll pull-right'>
           <div class='scroll-bar' id='year'>
             <div class='handle' id='draggable-year'></div>
-            <ul>
-              <li year='1999'>1999</li>
-              <li year='1999'>1999</li>
-              <li year='1999'>1999</li>
-              <li year='1999'>1999</li>
-              <li year='1999'>1999</li>
-              <li year='1999'>1999</li>
-              <li year='1999'>1999</li>
-              <li year='1999'>1999</li>
-              <li year='1999'>1999</li>
-              <li year='1999'>1999</li>
-              <li year='1999'>1999</li>
-            </ul>
+            <ul></ul>
           </div>
           <div class='scroll-bar' id='month'>
             <div class='handle' id='draggable-month'></div>
-            <ul>
-              <li month='jan'>Jan</li>
-              <li month='feb'>Feb</li>
-              <li month='mar'>Mar</li>
-              <li month='apr'>Apr</li>
-              <li month='may'>May</li>
-              <li month='jun'>Jun</li>
-              <li month='jul'>Jul</li>
-              <li month='aug'>Aug</li>
-              <li month='sep'>Sep</li>
-              <li month='oct'>Oct</li>
-              <li month='nov'>Nov</li>
-              <li month='dec'>Dec</li>
-            </ul>
+            <ul></ul>
           </div>
         </div>
       </div>
