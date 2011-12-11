@@ -20,30 +20,36 @@ class Calendar
 												 'October', 'November', 'December']
 		
 		@years 								= [@year-5..@year+5]
-		@calendarHeight 			= $('.calendar-container').height()
-		@calendarMidpoint 		= @calendarHeight * 0.5
-		
-		@monthSelectorHeight 	= $('#draggable-month').height()
-		@monthScrollBarHeight = $('.scroll-bar#month').height() - 20
-		@monthScaleFactor 		= @monthScrollBarHeight / 365
-		
-		@yearSelectorHeight = $('#draggable-year').height()
 		@daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 		@firstDay = new Date(@year, @month, 1).getDay();
-		@setupScrollBars()
+		
 		@buildCalendar()
+		@setupScrollBars()
 		@registerClicks()
-	
+		
+		@calendarHeight 			= $('.calendar-container').height()
+		@calendarMidpoint 		= @calendarHeight * 0.5
+		@monthSelectorHeight 	= $('#draggable-month').height()
+		@monthSelectorMidpoint = @monthSelectorHeight * 0.5
+		@monthScrollBarHeight = $('.scroll-bar#month').height() - 20
+		@monthScaleFactor 		= 365 / @monthScrollBarHeight
+		
+		@yearSelectorHeight 	= $('#draggable-year').height()
+		@yearSelectorMidpoint = @yearSelectorHeight * 0.5
+		@yearScrollBarHeight	= $('#year ul').height() - 12.5
+		@yearScaleFactor			= @years.length / @yearScrollBarHeight
+		
+		#376
 	setupScrollBars:->
 		$( "#draggable-month" ).draggable 
-			snap: ".scroll-bar#month"
+			containment: ".scroll-bar#month"
 			axis: 'y'
 			start: @monthScrollDidStart
 			stop: @monthScrollDidStop
 			drag: @monthScrollDidDrag
 		
 		$( "#draggable-year" ).draggable
-			snap: ".scroll-bar#year"
+			containment: ".scroll-bar#year"
 			axis: 'y'
 			start: @yearScrollDidStart
 			stop: @yearScrollDidStop
@@ -68,18 +74,18 @@ class Calendar
 			else
 				moveTo = scrollPosition + (offset.top - @calendarMidpoint)
 			
-			unless @animating
-				@animating = true
-				$('.calendar').animate
-					scrollTop: moveTo
-					,'slow'
-					, =>
-						@animating = false
-						console.log "animating done"
+			$('.calendar').animate
+				scrollTop: moveTo
+			, 
+				duration: 'slow'
+				queue: true
+		
 		@month = month
 		@year = year
 		@day = day
 	
+	scrollYearToDate: (date)->
+		
 	scrollMonthToDate: (date)->
 		top = date.getDOY()
 		$('#draggable-month').animate
@@ -100,9 +106,17 @@ class Calendar
 		console.log 'yearScrollDidStop'
 		
 	yearScrollDidDrag:(event, ui)=>
-		top = ui.offset.top
-		console.log top
-		console.log top / 12
+		top = ui.offset.top - 35 #
+		centerPos = top + @yearSelectorMidpoint
+		console.log "adjusted top is #{top} ul height is #{@yearScrollBarHeight}"
+		console.log "midpoint is #{centerPos}"
+		console.log "scale factor is #{@yearScaleFactor}"
+		year = @yearScaleFactor * centerPos
+		year = Math.round year
+		console.log year
+		console.log @years[year]
+		date = new Date(@years[year], @month, @day)
+		@scrollToDate date
 
 	yearScrollDidStart:(event, ui)=>
 		console.log 'yearScrollDidStop'
