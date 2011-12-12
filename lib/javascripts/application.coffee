@@ -5,15 +5,16 @@ Date::getDOY = ->
 class Calendar
 	@monthOffsets
 	@yearOffsets
-	@currentDate
 	@month
 	@year
 	@day
-	@firstDay
-	constructor:(month, year)->
-		@currentDate = new Date()
-		@month = month ? @currentDate.getMonth()
-		@year = year ? @currentDate.getFullYear()
+	constructor:(date)->
+		unless date instanceof Date
+			date = new Date()
+		@year = date.getFullYear()
+		@month = date.getMonth()
+		@day = date.getDay()
+		
 		@dayLabels = ['Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat', 'Sun']
 		@monthLabels = ['January', 'February', 'March', 'April',
 												 'May', 'June', 'July', 'August', 'September',
@@ -21,7 +22,6 @@ class Calendar
 		
 		@years 								= [@year-5..@year+5]
 		@daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-		@firstDay = new Date(@year, @month, 1).getDay();
 		
 		@buildCalendar()
 		@setupScrollBars()
@@ -39,7 +39,11 @@ class Calendar
 		@yearScrollBarHeight	= $('#year ul').height() - 12.5
 		@yearScaleFactor			= @years.length / @yearScrollBarHeight
 		
-		#376
+		$('.date-selector').html new Date(@year, @month, @day).toLocaleDateString()
+		@scrollToDate date
+		@scrollMonthToDate date
+		@scrollYearToDate date
+		
 	setupScrollBars:->
 		$( "#draggable-month" ).draggable 
 			containment: ".scroll-bar#month"
@@ -58,15 +62,18 @@ class Calendar
 	registerClicks:->
 		# Just attach to tables and bubble up
 		$('table').on 'click', 'a',  @didSelectDate
+		$('.date-selector').on 'click', ->
+			$('.calendar-container').toggle()
 		
 	scrollToDate:(date)->
 		month = date.getMonth()
 		year = date.getFullYear()
 		day = date.getDate(); 
-		
+		$('.selected').removeClass('selected')
 		if @month != month or year != @year or day != @day
 			scrollPosition = $('.calendar').scrollTop()
 			offset = $("a[day='#{day}'][month='#{month}'][year='#{year}']").offset()
+			$("a[day='#{day}'][month='#{month}'][year='#{year}']").parent('td').addClass('selected')
 			console.log "changing to #{day}-#{month}-#{year} scroll position #{scrollPosition}"
 			console.log "element is #{offset.top} from top and cal is #{@calendarHeight} tall"
 			if offset.top > @calendarHeight
@@ -85,7 +92,15 @@ class Calendar
 		@day = day
 	
 	scrollYearToDate: (date)->
-		
+		year = date.getFullYear()
+		index = $.inArray( year, @years )
+		console.log "got index #{index} with year #{year} scale #{@yearScaleFactor}"
+		top = (index / @yearScaleFactor) + 5
+		console.log top
+		$('#draggable-year').animate
+			top: top
+			, 'slow'
+	
 	scrollMonthToDate: (date)->
 		top = date.getDOY()
 		$('#draggable-month').animate
@@ -101,11 +116,9 @@ class Calendar
 		console.log date
 		@scrollToDate date
 		@scrollMonthToDate date
+		@scrollYearToDate date
 		
 	yearScrollDidStop:(event, ui)=>
-		console.log 'yearScrollDidStop'
-		
-	yearScrollDidDrag:(event, ui)=>
 		top = ui.offset.top - 35 #
 		centerPos = top + @yearSelectorMidpoint
 		console.log "adjusted top is #{top} ul height is #{@yearScrollBarHeight}"
@@ -117,6 +130,19 @@ class Calendar
 		console.log @years[year]
 		date = new Date(@years[year], @month, @day)
 		@scrollToDate date
+		
+	yearScrollDidDrag:(event, ui)=>
+		# top = ui.offset.top - 35 #
+		# 		centerPos = top + @yearSelectorMidpoint
+		# 		console.log "adjusted top is #{top} ul height is #{@yearScrollBarHeight}"
+		# 		console.log "midpoint is #{centerPos}"
+		# 		console.log "scale factor is #{@yearScaleFactor}"
+		# 		year = @yearScaleFactor * centerPos
+		# 		year = Math.round year
+		# 		console.log year
+		# 		console.log @years[year]
+		# 		date = new Date(@years[year], @month, @day)
+		# 		@scrollToDate date
 
 	yearScrollDidStart:(event, ui)=>
 		console.log 'yearScrollDidStop'
@@ -175,12 +201,13 @@ class Calendar
 				<tbody>
 					<tr>
 				'''
+				firstDay = new Date(year, month, 1).getDay();
 				buildWeek = true
 				day = 1
 				while day < @daysInMonth[month]
 					for num in [0..6]
 						html += "<td>"
-						if (day <= @daysInMonth[month]) and ((day > 1) or (num >= @firstDay))
+						if (day <= @daysInMonth[month]) and ((day > 1) or (num >= firstDay))
 							html += "<a day='#{day}' month='#{month}' year='#{year}' href='#'>" + day + "</a>"
 							day++
 						html += "</td>"

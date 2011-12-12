@@ -9,11 +9,19 @@ $month-handle: 50px
 $calendarHeight: 300px
 $calendarWidth: 250px
 
+td.selected
+	@include vertical-gradient($white, #f1da36)
+.date-selector
+	background-image: url(../assets/calendar.png)
+	background-position: right center
+	background-repeat: no-repeat
+	width: 100px
+	padding-right: 20px
 .calendar-container
 	width: 400px
 	height: 400px
-	margin-top: 20px
-	background-color: gray
+	margin-top: 10px
+	//background-color: gray
 	@include box-shadow
 	.calendar
 		width: $calendarWidth
@@ -24,13 +32,15 @@ $calendarWidth: 250px
 		height: 100%
 		#month.scroll-bar
 			width: 85px
+			margin-right: 2px
 		#year.scroll-bar
 			width: 60px
 		.scroll-bar
 			height: 100%
 			@include vertical-three-colors-gradient($grayLight, $white, 50%, $grayLight)
 			float: right
-			border: solid 1px black
+			@include box-shadow
+			@include border-radius
 			ul
 				text-align: center
 				li

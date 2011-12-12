@@ -14,17 +14,13 @@
 
     Calendar.yearOffsets;
 
-    Calendar.currentDate;
-
     Calendar.month;
 
     Calendar.year;
 
     Calendar.day;
 
-    Calendar.firstDay;
-
-    function Calendar(month, year) {
+    function Calendar(date) {
       this.monthScrollDidStart = __bind(this.monthScrollDidStart, this);
       this.monthScrollDidDrag = __bind(this.monthScrollDidDrag, this);
       this.monthScrollDidStop = __bind(this.monthScrollDidStop, this);
@@ -33,9 +29,10 @@
       this.yearScrollDidStop = __bind(this.yearScrollDidStop, this);
       this.didSelectDate = __bind(this.didSelectDate, this);
       var _i, _ref, _ref2, _results;
-      this.currentDate = new Date();
-      this.month = month != null ? month : this.currentDate.getMonth();
-      this.year = year != null ? year : this.currentDate.getFullYear();
+      if (!(date instanceof Date)) date = new Date();
+      this.year = date.getFullYear();
+      this.month = date.getMonth();
+      this.day = date.getDay();
       this.dayLabels = ['Mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat', 'Sun'];
       this.monthLabels = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
       this.years = (function() {
@@ -44,7 +41,6 @@
         return _results;
       }).apply(this);
       this.daysInMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-      this.firstDay = new Date(this.year, this.month, 1).getDay();
       this.buildCalendar();
       this.setupScrollBars();
       this.registerClicks();
@@ -58,6 +54,10 @@
       this.yearSelectorMidpoint = this.yearSelectorHeight * 0.5;
       this.yearScrollBarHeight = $('#year ul').height() - 12.5;
       this.yearScaleFactor = this.years.length / this.yearScrollBarHeight;
+      $('.date-selector').html(new Date(this.year, this.month, this.day).toLocaleDateString());
+      this.scrollToDate(date);
+      this.scrollMonthToDate(date);
+      this.scrollYearToDate(date);
     }
 
     Calendar.prototype.setupScrollBars = function() {
@@ -78,7 +78,10 @@
     };
 
     Calendar.prototype.registerClicks = function() {
-      return $('table').on('click', 'a', this.didSelectDate);
+      $('table').on('click', 'a', this.didSelectDate);
+      return $('.date-selector').on('click', function() {
+        return $('.calendar-container').toggle();
+      });
     };
 
     Calendar.prototype.scrollToDate = function(date) {
@@ -86,9 +89,11 @@
       month = date.getMonth();
       year = date.getFullYear();
       day = date.getDate();
+      $('.selected').removeClass('selected');
       if (this.month !== month || year !== this.year || day !== this.day) {
         scrollPosition = $('.calendar').scrollTop();
         offset = $("a[day='" + day + "'][month='" + month + "'][year='" + year + "']").offset();
+        $("a[day='" + day + "'][month='" + month + "'][year='" + year + "']").parent('td').addClass('selected');
         console.log("changing to " + day + "-" + month + "-" + year + " scroll position " + scrollPosition);
         console.log("element is " + offset.top + " from top and cal is " + this.calendarHeight + " tall");
         if (offset.top > this.calendarHeight) {
@@ -108,7 +113,17 @@
       return this.day = day;
     };
 
-    Calendar.prototype.scrollYearToDate = function(date) {};
+    Calendar.prototype.scrollYearToDate = function(date) {
+      var index, top, year;
+      year = date.getFullYear();
+      index = $.inArray(year, this.years);
+      console.log("got index " + index + " with year " + year + " scale " + this.yearScaleFactor);
+      top = (index / this.yearScaleFactor) + 5;
+      console.log(top);
+      return $('#draggable-year').animate({
+        top: top
+      }, 'slow');
+    };
 
     Calendar.prototype.scrollMonthToDate = function(date) {
       var top;
@@ -127,14 +142,11 @@
       date = new Date(year, month, day);
       console.log(date);
       this.scrollToDate(date);
-      return this.scrollMonthToDate(date);
+      this.scrollMonthToDate(date);
+      return this.scrollYearToDate(date);
     };
 
     Calendar.prototype.yearScrollDidStop = function(event, ui) {
-      return console.log('yearScrollDidStop');
-    };
-
-    Calendar.prototype.yearScrollDidDrag = function(event, ui) {
       var centerPos, date, top, year;
       top = ui.offset.top - 35;
       centerPos = top + this.yearSelectorMidpoint;
@@ -148,6 +160,8 @@
       date = new Date(this.years[year], this.month, this.day);
       return this.scrollToDate(date);
     };
+
+    Calendar.prototype.yearScrollDidDrag = function(event, ui) {};
 
     Calendar.prototype.yearScrollDidStart = function(event, ui) {
       return console.log('yearScrollDidStop');
@@ -198,7 +212,7 @@
     };
 
     Calendar.prototype.buildCalendar = function() {
-      var buildWeek, day, html, month, num, year, _i, _len, _ref, _results;
+      var buildWeek, day, firstDay, html, month, num, year, _i, _len, _ref, _results;
       this.buildScrollBars();
       _ref = this.years;
       _results = [];
@@ -216,12 +230,13 @@
               html += "<th>" + day + "</th>";
             }
             html += '	</tr>\n</thead>\n<tbody>\n	<tr>';
+            firstDay = new Date(year, month, 1).getDay();
             buildWeek = true;
             day = 1;
             while (day < this.daysInMonth[month]) {
               for (num = 0; num <= 6; num++) {
                 html += "<td>";
-                if ((day <= this.daysInMonth[month]) && ((day > 1) || (num >= this.firstDay))) {
+                if ((day <= this.daysInMonth[month]) && ((day > 1) || (num >= firstDay))) {
                   html += ("<a day='" + day + "' month='" + month + "' year='" + year + "' href='#'>") + day + "</a>";
                   day++;
                 }
